@@ -9,12 +9,15 @@ describe('app routes', () => {
   beforeAll(() => {
     connect();
   });
+
   beforeEach(() => {
     return mongoose.connection.dropDatabase();
   });
+
   afterAll(() => {
     return mongoose.connection.close();
   });
+
   it('creates a new tweet', () => {
     return request(app)
       .post('/api/v1/tweets')
@@ -31,6 +34,7 @@ describe('app routes', () => {
         });
       });
   });
+
   it('gets all tweets', async() => {
     const tweets = await Tweet.create([
       { handle: '@testing1', text: 'testing1' },
@@ -47,38 +51,55 @@ describe('app routes', () => {
         });
       });
   });
+
+  it('gets tweet by id', async() => {
+    const tweet = await Tweet.create({ 
+      handle: '@testing1', text: 'testing1' 
+    });
+    return request(app)
+      .get(`/api/v1/tweets/${tweet._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: tweet._id.toString(),
+          handle: tweet.handle, 
+          text: tweet.text,  
+          __v: 0
+        });
+      });
+  });
+
+  it('updates tweet by id', async() => {
+    const tweet = await Tweet.create({ 
+      handle: '@testing1', text: 'testing1' 
+    });
+    return request(app)
+      .patch(`/api/v1/tweets/${tweet._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: tweet._id.toString(),
+          handle: tweet.handle, 
+          text: tweet.text,  
+          __v: 0
+        });
+      });
+  });
+  
+  it('deletes tweet by id', async() => {
+    const tweet = await Tweet.create({ 
+      handle: '@testing1', text: 'testing1' 
+    });
+    return request(app)
+      .delete(`/api/v1/tweets/${tweet._id}`)
+      .then(res => {
+        expect(res.body).toEqual({
+          _id: tweet._id.toString(),
+          handle: tweet.handle, 
+          text: tweet.text,  
+          __v: 0
+        });
+      });
+  });
 });
-
-// GET /api/v1/tweets/:id to get a tweet by ID
-//   it('get tweet by id', () => {
-//     return Tweet.create([
-//       {
-//         handle: '@testing',
-//         text: 'testing'
-//       },
-//       {
-//         handle: '@testing',
-//         text: 'testing'
-//       },
-//       {
-//         handle: '@testing',
-//         text: 'testing'
-//       }
-//     ])
-//     .then(() => {
-//         request(app)
-//         .get('/api/v1/tweets')
-//         .then(res => {
-//             expect(res.body).toContainEqual({
-//              _id: expect.any(String),
-//              handle: expect.any(String),
-//             text: expect.any(String),
-//              __v: 0
-//         });
-//       });
-//   });
-
-
 
 // PATCH /api/v1/tweets/:id to update a tweets text ONLY
 // DELETE /api/v1/tweets/:id to delete a tweet 
