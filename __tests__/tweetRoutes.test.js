@@ -36,7 +36,7 @@ describe('app routes', () => {
           });
       });
   });
-
+  // GET /api/v1/tweets to get all tweets
   it('gets all tweets', () => {
     return Tweet.create([
       {
@@ -44,30 +44,57 @@ describe('app routes', () => {
         text: 'testing'
       },
       {
-        handle: '@testing',
-        text: 'testing'
+        handle: '@testing2',
+        text: 'testing2'
       },
       {
-        handle: '@testing',
-        text: 'testing'
+        handle: '@testing3',
+        text: 'testing3'
       }
     ])
-    .then(() => {
+      .then(() => {
         request(app)
-        .get('/api/v1/tweets')
-        .then(res => {
+          .get('/api/v1/tweets')
+          .then(res => {
             expect(res.body).toContainEqual({
-             _id: expect.any(String),
-             handle: expect.any(String),
-            text: expect.any(String),
-             __v: 0
-        });
+              _id: expect.any(String),
+              handle: '@testing',
+              text: 'testing',
+              __v: 0
+            });
+          });
       });
   });
+  // GET /api/v1/tweets/:id to get a tweet by ID
+//   it('get tweet by id', () => {
+//     return Tweet.create([
+//       {
+//         handle: '@testing',
+//         text: 'testing'
+//       },
+//       {
+//         handle: '@testing',
+//         text: 'testing'
+//       },
+//       {
+//         handle: '@testing',
+//         text: 'testing'
+//       }
+//     ])
+//     .then(() => {
+//         request(app)
+//         .get('/api/v1/tweets')
+//         .then(res => {
+//             expect(res.body).toContainEqual({
+//              _id: expect.any(String),
+//              handle: expect.any(String),
+//             text: expect.any(String),
+//              __v: 0
+//         });
+//       });
+//   });
 });
 
 
-// GET /api/v1/tweets to get all tweets
-// GET /api/v1/tweets/:id to get a tweet by ID
 // PATCH /api/v1/tweets/:id to update a tweets text ONLY
 // DELETE /api/v1/tweets/:id to delete a tweet 
