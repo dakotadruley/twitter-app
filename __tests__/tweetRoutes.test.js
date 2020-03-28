@@ -5,7 +5,7 @@ const connect = require('../lib/utils/connect');
 const mongoose = require('mongoose');
 const Tweet = require('../lib/models/Tweet');
 
-describe('app routes', () => {
+describe('tweet routes', () => {
   beforeAll(() => {
     connect();
   });
@@ -74,11 +74,12 @@ describe('app routes', () => {
     });
     return request(app)
       .patch(`/api/v1/tweets/${tweet._id}`)
+      .send({ text: 'testing2' })
       .then(res => {
         expect(res.body).toEqual({
           _id: tweet._id.toString(),
           handle: tweet.handle, 
-          text: tweet.text,  
+          text: 'testing2',  
           __v: 0
         });
       });
