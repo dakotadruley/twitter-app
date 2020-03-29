@@ -74,6 +74,7 @@ describe('tweet routes', () => {
           comments: expect.any(Array),
           __v: 0
         });
+        expect(res.body.comments).toEqual(JSON.parse(JSON.stringify(comments)));
       });
   });
 
